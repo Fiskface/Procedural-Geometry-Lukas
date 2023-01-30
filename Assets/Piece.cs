@@ -23,6 +23,26 @@ public class Piece : MonoBehaviour
     {
         MeshBuilder builder = new MeshBuilder();
 
+        CheckCurrentState();
+        
+        MakeCenter();
+        
+        builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
+            new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
+        
+        builder.Build(mesh);
+    }
+
+    enum state
+    {
+        Grass,
+        Solid,
+        Water,
+        Bridge
+    }
+    
+    private void CheckCurrentState()
+    {
         if (tile.GetProperty(GridTileProperty.Solid) && tile.GetProperty(GridTileProperty.Water))
         {
             currentState = state.Bridge;
@@ -42,16 +62,18 @@ public class Piece : MonoBehaviour
                 currentState = state.Grass;
             }
         }
-
-
-            builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f),
-            new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
-        
-        builder.Build(mesh);
     }
 
+    private void MakeCenter()
+    {
+        if (currentState == state.Solid)
+        {
+            
+        }
+    }
+    
+    /*
     private void OnDrawGizmos() {
-        
         if (tile.GetProperty(GridTileProperty.Solid)) {
             Gizmos.color = Color.red;
         } else {
@@ -64,14 +86,6 @@ public class Piece : MonoBehaviour
         
         Gizmos.DrawCube(transform.position, new Vector3(1, 0.1f, 1));
     }
-
-    enum state
-    {
-        Grass,
-        Solid,
-        Water,
-        Bridge
-    }
+    */
     
-
 }
