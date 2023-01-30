@@ -10,7 +10,7 @@ public class Piece : MonoBehaviour
     private Mesh mesh;
     private GridTile tile;
     private state currentState;
-    
+
     private void Start()
     {
         tile = GetComponent<GridTile>();
@@ -22,12 +22,30 @@ public class Piece : MonoBehaviour
     private void Update()
     {
         MeshBuilder builder = new MeshBuilder();
-        
-        
-        
-        
-        builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f),
-            new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), );
+
+        if (tile.GetProperty(GridTileProperty.Solid) && tile.GetProperty(GridTileProperty.Water))
+        {
+            currentState = state.Bridge;
+        }
+        else
+        {
+            if (tile.GetProperty(GridTileProperty.Solid))
+            {
+                currentState = state.Solid;
+            }
+            else if (tile.GetProperty(GridTileProperty.Water))
+            {
+                currentState = state.Water;
+            }
+            else
+            {
+                currentState = state.Grass;
+            }
+        }
+
+
+            builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f),
+            new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
         
         builder.Build(mesh);
     }

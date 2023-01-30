@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c035cddf-ae92-4073-8fb2-d20285042bba" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/AAAAA.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AAAAA.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Procedural-Geometry/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Procedural-Geometry/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MeshBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MeshBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Piece.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Piece.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +74,7 @@
       <updated>1674043987676</updated>
       <workItem from="1674044004416" duration="2704000" />
       <workItem from="1674047856026" duration="4102000" />
+      <workItem from="1675085915152" duration="689000" />
     </task>
     <servers />
   </component>

@@ -53,19 +53,19 @@ namespace Scenes
                 int a = AddVertex(
                 botLeft, 
                 normal, 
-                new Vector2(0, 0));
+                new Vector2(min.x, min.y));
             int b = AddVertex(
                 topLeft, 
                 normal, 
-                new Vector2(0, 1));
+                new Vector2(min.x, max.y));
             int c = AddVertex(
                 topRight, 
                 normal, 
-                new Vector2(1, 1));
+                new Vector2(max.x, max.y));
             int d = AddVertex(
                 botRight, 
                 normal, 
-                new Vector2(1, 0));
+                new Vector2(max.x, min.y));
             
             AddQuad(a, b, c, d);
         }
