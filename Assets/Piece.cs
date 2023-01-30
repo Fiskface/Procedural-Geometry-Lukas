@@ -1,15 +1,20 @@
 using System;
 using Grid;
 using Scenes;
+using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [ExecuteAlways]
 [RequireComponent(typeof(GridTile), typeof(MeshFilter), typeof(MeshRenderer))]
 public class Piece : MonoBehaviour
 {
+    MeshBuilder builder = new MeshBuilder();
+    
     private Mesh mesh;
     private GridTile tile;
     private state currentState;
+    
 
     private void Start()
     {
@@ -21,14 +26,12 @@ public class Piece : MonoBehaviour
 
     private void Update()
     {
-        MeshBuilder builder = new MeshBuilder();
-
         CheckCurrentState();
         
         MakeCenter();
         
-        builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
-            new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
+        //builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
+        //    new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
         
         builder.Build(mesh);
     }
@@ -64,15 +67,71 @@ public class Piece : MonoBehaviour
         }
     }
 
+    private state CheckNeighborCurrentState(int neighbor)
+    {
+        if (tile.GetNeighbourProperty(neighbor, GridTileProperty.Solid) && tile.GetNeighbourProperty(neighbor, GridTileProperty.Water))
+        {
+            return state.Bridge;
+        }
+        else
+        {
+            if (tile.GetNeighbourProperty(neighbor, GridTileProperty.Solid))
+            {
+                return state.Solid;
+            }
+            else if (tile.GetNeighbourProperty(neighbor, GridTileProperty.Water))
+            {
+                return state.Water;
+            }
+            else
+            {
+                return state.Grass;
+            }
+        }
+    }
+
     private void MakeCenter()
     {
         if (currentState == state.Solid)
         {
+            builder.CreateQuad(new Vector3(-1/6f, -0.3f, -1/6f),new Vector3(-1/6f, -0.3f, 1/6f), new Vector3(1/6f, -0.3f, 1/6f), 
+                new Vector3(1/6f, -0.3f, -1/6f), new Vector3(0, 1, 0), (int)currentState);
+
+            for (int i = 0; i < 4; i++)
+            {
+                if(CheckNeighborCurrentState(i*2) == state.Solid)
+                {
+                    /*Matrix4x4 mat =
+                        Matrix4x4.Translate(new Vector3(-0.5f, 0, i * 0.5f)) *
+                        Matrix4x4.Rotate(Quaternion.AngleAxis(-90, new Vector3(0, 1, 0)));
+
+                    builder.VertexMatrix = mat;*/
+                    
+                    builder.CreateQuad(new Vector3(1/6f, -0.3f, -1/6f),new Vector3(1/6f, -0.3f, 1/6f), new Vector3(0.5f, -0.3f, 1/6f), 
+                        new Vector3(0.5f, -0.3f, -1/6f), new Vector3(0, 1, 0), (int)currentState);
+                }
+            }
             
+        }
+        else if (currentState == state.Grass)
+        {
+            
+            builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
+                new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
+        }
+        else if (currentState == state.Water)
+        {
+            builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
+                new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
+        }
+        else if (currentState == state.Bridge)
+        {
+            builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
+                new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
         }
     }
     
-    /*
+    
     private void OnDrawGizmos() {
         if (tile.GetProperty(GridTileProperty.Solid)) {
             Gizmos.color = Color.red;
@@ -86,6 +145,6 @@ public class Piece : MonoBehaviour
         
         Gizmos.DrawCube(transform.position, new Vector3(1, 0.1f, 1));
     }
-    */
+    
     
 }
