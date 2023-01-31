@@ -90,44 +90,109 @@ public class Piece : MonoBehaviour
         }
     }
 
+    private bool Check2StepsClockwise(int i, state state)
+    {
+        if (i <= 1)
+            i += 8;
+        i -= 2;
+        return CheckNeighborCurrentState(i) == state;
+    }
+
+    private bool Check2StepsCounterClockwise(int i, state state)
+    {
+        if (i >= 6)
+            i -= 8;
+        i += 2;
+        return CheckNeighborCurrentState(i) == state;
+    }
+
     private void MakeCenter()
     {
+        //Stoppar texurerna från att snurra hela tiden.
+        builder.VertexMatrix = Matrix4x4.identity;
+        
         if (currentState == state.Solid)
         {
-            builder.CreateQuad(new Vector3(-1/6f, -0.3f, -1/6f),new Vector3(-1/6f, -0.3f, 1/6f), new Vector3(1/6f, -0.3f, 1/6f), 
-                new Vector3(1/6f, -0.3f, -1/6f), new Vector3(0, 1, 0), (int)currentState);
-
+            builder.CreateQuad(new Vector3(-1/6f, -0.2f, -1/6f),new Vector3(-1/6f, -0.2f, 1/6f), new Vector3(1/6f, -0.2f, 1/6f), 
+                new Vector3(1/6f, -0.2f, -1/6f), (int)currentState);
+            
             for (int i = 0; i < 4; i++)
             {
+                Matrix4x4 mat = Matrix4x4.Rotate(Quaternion.AngleAxis(-90 * i, new Vector3(0, 1, 0)));
+                                 builder.VertexMatrix = mat;
+                //Gräshörn                 
+                builder.CreateQuad(new Vector3(1/3f, 0f, 0.5f),new Vector3(0.5f, 0f, 0.5f), new Vector3(0.5f, 0f, 1/3f), 
+                    new Vector3(1/3f, 0f, 1/3f), (int)state.Grass);
+                                 
                 if(CheckNeighborCurrentState(i*2) == state.Solid)
                 {
-                    /*Matrix4x4 mat =
-                        Matrix4x4.Translate(new Vector3(-0.5f, 0, i * 0.5f)) *
-                        Matrix4x4.Rotate(Quaternion.AngleAxis(-90, new Vector3(0, 1, 0)));
+                    //Plattan som connectar vägen.
+                    builder.CreateQuad(new Vector3(1/6f, -0.2f, -1/6f),new Vector3(1/6f, -0.2f, 1/6f), new Vector3(0.5f, -0.2f, 1/6f), 
+                        new Vector3(0.5f, -0.2f, -1/6f), (int)currentState);
 
-                    builder.VertexMatrix = mat;*/
                     
-                    builder.CreateQuad(new Vector3(1/6f, -0.3f, -1/6f),new Vector3(1/6f, -0.3f, 1/6f), new Vector3(0.5f, -0.3f, 1/6f), 
-                        new Vector3(0.5f, -0.3f, -1/6f), new Vector3(0, 1, 0), (int)currentState);
+                    //Make smooth corners in wall when path is turning
+                    if (Check2StepsClockwise(i*2, state.Solid))
+                    {
+                        builder.CreateQuad(new Vector3(0.5f, -0.2f, -1/6f),new Vector3(0.5f, 0, -1/3f), new Vector3(1/3f, 0, -1/3f), 
+                            new Vector3(1/6f,-0.2f, -1/6f), (int)currentState);
+                    }
+                    else
+                    {
+                        builder.CreateQuad(new Vector3(0.5f, -0.2f, -1/6f),new Vector3(0.5f, 0, -1/3f), new Vector3(1/6f, 0, -1/3f), 
+                            new Vector3(1/6f,-0.2f, -1/6f), (int)currentState);
+                    }
+                    if (Check2StepsCounterClockwise(i*2, state.Solid))
+                    {
+                        builder.CreateQuad(new Vector3(1/6f, -0.2f, 1/6f),new Vector3(1/3f, 0, 1/3f), new Vector3(0.5f, 0, 1/3f), 
+                            new Vector3(0.5f, -0.2f, 1/6f), (int)currentState);
+                    }
+                    else
+                    {
+                        builder.CreateQuad(new Vector3(1/6f, -0.2f, 1/6f),new Vector3(1/6f, 0, 1/3f), new Vector3(0.5f, 0, 1/3f), 
+                            new Vector3(0.5f, -0.2f, 1/6f), (int)currentState);
+                    }
                 }
+                
+                //If it's not a path
+                else
+                {
+                    builder.CreateQuad(new Vector3(1/6f, -0.2f, 1/6f),new Vector3(1/3f, 0, 1/6f), new Vector3(1/3f, 0, -1/6f), 
+                        new Vector3(1/6f, -0.2f, -1/6f), (int)currentState);
+                    
+                    builder.CreateQuad(new Vector3(1/3f, 0f, 1/3f),new Vector3(0.5f, 0f, 1/3f), new Vector3(0.5f, 0, -1/3f), 
+                        new Vector3(1/3f, 0, -1/3f), (int)state.Grass);
+                    
+                    if (!Check2StepsClockwise(i*2, state.Solid))
+                    {
+                        builder.CreateTriangle(new Vector3(1/6f, -0.2f, -1/6f), new Vector3(1/3f, 0, -1/6f), new Vector3(1/3f, 0, -1/3f), (int)currentState);
+                        builder.CreateTriangle(new Vector3(1/6f, -0.2f, -1/6f), new Vector3(1/3f, 0, -1/3f), new Vector3(1/6f,0, -1/3f), (int)currentState);
+                        
+                        //builder.CreateQuad(new Vector3(1/6f, -0.2f, -1/6f),new Vector3(1/3f, 0, -1/6f), new Vector3(1/3f, 0, -1/3f), 
+                        //    new Vector3(1/6f,0, -1/3f), (int)currentState);
+                    }
+                }
+                
             }
-            
         }
+        
         else if (currentState == state.Grass)
         {
             
             builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
-                new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
+                new Vector3(0.5f, 0, -0.5f), (int)currentState);
         }
+        
         else if (currentState == state.Water)
         {
             builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
-                new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
+                new Vector3(0.5f, 0, -0.5f), (int)currentState);
         }
+        
         else if (currentState == state.Bridge)
         {
             builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
-                new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
+                new Vector3(0.5f, 0, -0.5f), (int)currentState);
         }
     }
     

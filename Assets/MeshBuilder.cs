@@ -15,10 +15,10 @@ namespace Scenes
         
         private Vector2[] stateTextureUV =
         {
-            new Vector2(0, 1), new Vector2(0.5f, 0.5f),
-            new Vector2(0.5f, 0.5f), new Vector2(1, 0),
-            new Vector2(0.5f, 1), new Vector2(1, 0.5f),
-            new Vector2(0, 0.5f), new Vector2(0.5f, 0)
+            new Vector2(0, 1f), new Vector2(0.5f, 0.5f), //Gräs
+            new Vector2(0.5f, 0.5f), new Vector2(1, 0), //Sten
+            new Vector2(0.5f, 1), new Vector2(1f, 0.5f), //Vatten
+            new Vector2(0f, 0.5f), new Vector2(0.5f, 0f) //Sand
         };
 
         public int AddVertex(Vector3 position, Vector3 normal, Vector2 uv)
@@ -28,6 +28,18 @@ namespace Scenes
             normals.Add(VertexMatrix.MultiplyVector(normal));
             this.uv.Add(TextureMatrix.MultiplyPoint(uv));
             return index;
+        }
+
+        public void CreateTriangle(Vector3 hörn1, Vector3 hörn2, Vector3 hörn3, int state)
+        {
+            TranslateForTexture(state);
+            
+            Vector3 normal = GetNormal(hörn1, hörn2, hörn3);
+            
+            triangles.Add(AddVertex(hörn1, normal, new Vector2(1, 1)));
+            triangles.Add(AddVertex(hörn2, normal, new Vector2(1, 0)));
+            triangles.Add(AddVertex(hörn3, normal, new Vector2(0, 0)));
+            
         }
 
         public void AddQuad(int bottomLeft, int topLeft, int topRight, int bottomRight)
@@ -44,30 +56,70 @@ namespace Scenes
         }
         
         //add 2 vectors for minimum and maximum uv
-        public void CreateQuad(Vector3 botLeft, Vector3 topLeft, Vector3 topRight, Vector3 botRight, Vector3 normal, int state)
+        public void CreateQuad(Vector3 botLeft, Vector3 topLeft, Vector3 topRight, Vector3 botRight, int state)
         {
-            Vector2 min = stateTextureUV[state * 2];
-            Vector2 max = stateTextureUV[state * 2 + 1];
+            TranslateForTexture(state);
+            
+            Vector3 normal = GetNormal(botLeft, topLeft, topRight);
 
-
-                int a = AddVertex(
-                botLeft, 
-                normal, 
-                new Vector2(min.x, min.y));
+            int a = AddVertex(
+                botLeft,
+                normal,
+            new Vector2(0, 0));
+            //new Vector2(min.x, min.y));
             int b = AddVertex(
-                topLeft, 
-                normal, 
-                new Vector2(min.x, max.y));
+                topLeft,
+                normal,
+                new Vector2(0, 1));
+            //new Vector2(min.x, max.y));
             int c = AddVertex(
-                topRight, 
+                topRight,
                 normal, 
-                new Vector2(max.x, max.y));
+                new Vector2(1, 1));
+                //new Vector2(max.x, max.y));
             int d = AddVertex(
-                botRight, 
-                normal, 
-                new Vector2(max.x, min.y));
+                botRight,
+                normal,
+                new Vector2(1, 0));
+                //new Vector2(max.x, min.y));
             
             AddQuad(a, b, c, d);
+        }
+
+        //Tagen från https://docs.unity3d.com/ScriptReference/Vector3.Cross.html
+        private Vector3 GetNormal(Vector3 a, Vector3 b, Vector3 c)
+        {
+            Vector3 side1 = b - a;
+            Vector3 side2 = c - a;
+
+            return Vector3.Cross(side1, side2).normalized;
+        }
+
+        private void TranslateForTexture(int stateInt)
+        {
+            TextureMatrix = Matrix4x4.Scale(new Vector3(0.5f, 0.5f, 1));
+            Vector2 multWith;
+            
+            switch (stateInt)
+            {
+                case 0:
+                    multWith = new Vector2(0, 1f);
+                    break;
+                case 1:
+                    multWith = new Vector2(1f, 0);
+                    break;
+                case 2:
+                    multWith = new Vector2(1f, 1f);
+                    break;
+                case 3:
+                    multWith = new Vector2(0, 0);
+                    break;
+                default:
+                    multWith = new Vector2(0, 1f);
+                    break;
+            }
+            
+            TextureMatrix *= Matrix4x4.Translate(multWith);
         }
 
         public void Build(Mesh mesh)
