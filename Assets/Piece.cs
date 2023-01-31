@@ -118,8 +118,8 @@ public class Piece : MonoBehaviour
             
             for (int i = 0; i < 4; i++)
             {
-                Matrix4x4 mat = Matrix4x4.Rotate(Quaternion.AngleAxis(-90 * i, new Vector3(0, 1, 0)));
-                                 builder.VertexMatrix = mat;
+                builder.VertexMatrix = Matrix4x4.Rotate(Quaternion.AngleAxis(-90 * i, new Vector3(0, 1, 0)));
+
                 //Gräshörn                 
                 builder.CreateQuad(new Vector3(1/3f, 0f, 0.5f),new Vector3(0.5f, 0f, 0.5f), new Vector3(0.5f, 0f, 1/3f), 
                     new Vector3(1/3f, 0f, 1/3f), (int)state.Grass);
@@ -181,12 +181,36 @@ public class Piece : MonoBehaviour
             
             builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
                 new Vector3(0.5f, 0, -0.5f), (int)currentState);
+
+            
         }
         
         else if (currentState == state.Water)
         {
-            builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
-                new Vector3(0.5f, 0, -0.5f), (int)currentState);
+            builder.CreateQuad(new Vector3(-0.5f, -0.1f, -0.5f),new Vector3(-0.5f, -0.1f, 0.5f), new Vector3(0.5f, -0.1f, 0.5f), 
+                new Vector3(0.5f, -0.1f, -0.5f), (int)currentState);
+            
+            for (int i = 0; i < 4; i++)
+            {
+                builder.VertexMatrix = Matrix4x4.Rotate(Quaternion.AngleAxis(-90 * i, new Vector3(0, 1, 0)));
+
+                if (CheckNeighborCurrentState(i*2) == state.Water)
+                {
+                    if (Check2StepsClockwise(i*2, state.Water))
+                    {
+                        builder.CreateTriangle(new Vector3(0.5f, -0.1f, -0.4f), new Vector3(0.5f, 0, -0.5f), new Vector3(0.4f, -0.1f, -0.5f), (int)state.Solid);
+                    }
+                    
+                    
+                }
+
+                else
+                {
+                    builder.CreateQuad(new Vector3(0.4f, -0.1f, 0.5f),new Vector3(0.5f, 0f, 0.5f), new Vector3(0.5f, 0, -0.5f), 
+                                            new Vector3(0.4f, -0.1f, -0.5f), (int)state.Solid);
+                }
+                
+            }
         }
         
         else if (currentState == state.Bridge)
