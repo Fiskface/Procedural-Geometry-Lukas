@@ -114,43 +114,43 @@ public class Piece : MonoBehaviour
         if (currentState == state.Solid)
         {
             builder.CreateQuad(new Vector3(-1/6f, -0.2f, -1/6f),new Vector3(-1/6f, -0.2f, 1/6f), new Vector3(1/6f, -0.2f, 1/6f), 
-                new Vector3(1/6f, -0.2f, -1/6f), (int)currentState);
+                new Vector3(1/6f, -0.2f, -1/6f), (int)currentState, 0);
             
             for (int i = 0; i < 4; i++)
             {
                 builder.VertexMatrix = Matrix4x4.Rotate(Quaternion.AngleAxis(-90 * i, new Vector3(0, 1, 0)));
-
+                
                 //Gräshörn                 
                 builder.CreateQuad(new Vector3(1/3f, 0f, 0.5f),new Vector3(0.5f, 0f, 0.5f), new Vector3(0.5f, 0f, 1/3f), 
-                    new Vector3(1/3f, 0f, 1/3f), (int)state.Grass);
+                    new Vector3(1/3f, 0f, 1/3f), (int)state.Grass, i);
                                  
                 if(CheckNeighborCurrentState(i*2) == state.Solid)
                 {
                     //Plattan som connectar vägen.
                     builder.CreateQuad(new Vector3(1/6f, -0.2f, -1/6f),new Vector3(1/6f, -0.2f, 1/6f), new Vector3(0.5f, -0.2f, 1/6f), 
-                        new Vector3(0.5f, -0.2f, -1/6f), (int)currentState);
+                        new Vector3(0.5f, -0.2f, -1/6f), (int)currentState, i);
 
                     
                     //Make smooth corners in wall when path is turning
                     if (Check2StepsClockwise(i*2, state.Solid))
                     {
                         builder.CreateQuad(new Vector3(0.5f, -0.2f, -1/6f),new Vector3(0.5f, 0, -1/3f), new Vector3(1/3f, 0, -1/3f), 
-                            new Vector3(1/6f,-0.2f, -1/6f), (int)currentState);
+                            new Vector3(1/6f,-0.2f, -1/6f), (int)currentState, i);
                     }
                     else
                     {
                         builder.CreateQuad(new Vector3(0.5f, -0.2f, -1/6f),new Vector3(0.5f, 0, -1/3f), new Vector3(1/6f, 0, -1/3f), 
-                            new Vector3(1/6f,-0.2f, -1/6f), (int)currentState);
+                            new Vector3(1/6f,-0.2f, -1/6f), (int)currentState, i);
                     }
                     if (Check2StepsCounterClockwise(i*2, state.Solid))
                     {
                         builder.CreateQuad(new Vector3(1/6f, -0.2f, 1/6f),new Vector3(1/3f, 0, 1/3f), new Vector3(0.5f, 0, 1/3f), 
-                            new Vector3(0.5f, -0.2f, 1/6f), (int)currentState);
+                            new Vector3(0.5f, -0.2f, 1/6f), (int)currentState, i);
                     }
                     else
                     {
                         builder.CreateQuad(new Vector3(1/6f, -0.2f, 1/6f),new Vector3(1/6f, 0, 1/3f), new Vector3(0.5f, 0, 1/3f), 
-                            new Vector3(0.5f, -0.2f, 1/6f), (int)currentState);
+                            new Vector3(0.5f, -0.2f, 1/6f), (int)currentState, i);
                     }
                 }
                 
@@ -158,15 +158,17 @@ public class Piece : MonoBehaviour
                 else
                 {
                     builder.CreateQuad(new Vector3(1/6f, -0.2f, 1/6f),new Vector3(1/3f, 0, 1/6f), new Vector3(1/3f, 0, -1/6f), 
-                        new Vector3(1/6f, -0.2f, -1/6f), (int)currentState);
+                        new Vector3(1/6f, -0.2f, -1/6f), (int)currentState, i);
                     
                     builder.CreateQuad(new Vector3(1/3f, 0f, 1/3f),new Vector3(0.5f, 0f, 1/3f), new Vector3(0.5f, 0, -1/3f), 
-                        new Vector3(1/3f, 0, -1/3f), (int)state.Grass);
+                        new Vector3(1/3f, 0, -1/3f), (int)state.Grass, i);
                     
                     if (!Check2StepsClockwise(i*2, state.Solid))
                     {
-                        builder.CreateTriangle(new Vector3(1/6f, -0.2f, -1/6f), new Vector3(1/3f, 0, -1/6f), new Vector3(1/3f, 0, -1/3f), (int)currentState);
-                        builder.CreateTriangle(new Vector3(1/6f, -0.2f, -1/6f), new Vector3(1/3f, 0, -1/3f), new Vector3(1/6f,0, -1/3f), (int)currentState);
+                        builder.CreateTriangle(new Vector3(1/6f, -0.2f, -1/6f), new Vector3(1/3f, 0, -1/6f),
+                            new Vector3(1/3f, 0, -1/3f), (int)currentState, i);
+                        builder.CreateTriangle(new Vector3(1/6f, -0.2f, -1/6f), new Vector3(1/3f, 0, -1/3f),
+                            new Vector3(1/6f,0, -1/3f), (int)currentState, i);
                         
                         //builder.CreateQuad(new Vector3(1/6f, -0.2f, -1/6f),new Vector3(1/3f, 0, -1/6f), new Vector3(1/3f, 0, -1/3f), 
                         //    new Vector3(1/6f,0, -1/3f), (int)currentState);
@@ -180,7 +182,7 @@ public class Piece : MonoBehaviour
         {
             
             builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
-                new Vector3(0.5f, 0, -0.5f), (int)currentState);
+                new Vector3(0.5f, 0, -0.5f), (int)currentState, 0);
 
             
         }
@@ -188,7 +190,7 @@ public class Piece : MonoBehaviour
         else if (currentState == state.Water)
         {
             builder.CreateQuad(new Vector3(-0.5f, -0.1f, -0.5f),new Vector3(-0.5f, -0.1f, 0.5f), new Vector3(0.5f, -0.1f, 0.5f), 
-                new Vector3(0.5f, -0.1f, -0.5f), (int)currentState);
+                new Vector3(0.5f, -0.1f, -0.5f), (int)currentState, 0);
             
             for (int i = 0; i < 4; i++)
             {
@@ -198,14 +200,15 @@ public class Piece : MonoBehaviour
                 {
                     if (Check2StepsClockwise(i*2, state.Water))
                     {
-                        builder.CreateTriangle(new Vector3(0.5f, -0.1f, -0.4f), new Vector3(0.5f, 0, -0.5f), new Vector3(0.4f, -0.1f, -0.5f), (int)state.Solid);
+                        builder.CreateTriangle(new Vector3(0.5f, -0.1f, -0.4f), new Vector3(0.5f, 0, -0.5f),
+                            new Vector3(0.4f, -0.1f, -0.5f), (int)state.Solid, i);
                     }
                 }
 
                 else
                 {
                     builder.CreateQuad(new Vector3(0.4f, -0.1f, 0.5f),new Vector3(0.5f, 0f, 0.5f), new Vector3(0.5f, 0, -0.5f), 
-                                            new Vector3(0.4f, -0.1f, -0.5f), (int)state.Solid);
+                                            new Vector3(0.4f, -0.1f, -0.5f), (int)state.Solid, i);
                 }
                 
             }
@@ -214,7 +217,7 @@ public class Piece : MonoBehaviour
         else if (currentState == state.Bridge)
         {
             builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
-                new Vector3(0.5f, 0, -0.5f), (int)currentState);
+                new Vector3(0.5f, 0, -0.5f), (int)currentState, 0);
 
             for (int i = 0; i < 4; i++)
             {

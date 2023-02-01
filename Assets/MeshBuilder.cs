@@ -30,19 +30,19 @@ namespace Scenes
             return index;
         }
 
-        public void CreateTriangle(Vector3 hörn1, Vector3 hörn2, Vector3 hörn3, int state)
+        public void CreateTriangle(Vector3 corner1, Vector3 corner2, Vector3 corner3, int state, int rotation)
         {
-            TranslateForTexture(state);
+            TranslateForTexture(state, rotation);
             
-            Vector3 normal = GetNormal(hörn1, hörn2, hörn3);
+            Vector3 normal = GetNormal(corner1, corner2, corner3);
             
             //triangles.Add(AddVertex(hörn1, normal, new Vector2(1, 1)));
             //triangles.Add(AddVertex(hörn2, normal, new Vector2(1, 0)));
             //triangles.Add(AddVertex(hörn3, normal, new Vector2(0, 0)));
             
-            triangles.Add(AddVertex(hörn1, normal, new Vector2(hörn1.z + 0.5f, hörn1.x + 0.5f)));
-            triangles.Add(AddVertex(hörn2, normal, new Vector2(hörn2.z + 0.5f, hörn2.x + 0.5f)));
-            triangles.Add(AddVertex(hörn3, normal, new Vector2(hörn3.z + 0.5f, hörn3.x + 0.5f)));
+            triangles.Add(AddVertex(corner1, normal, new Vector2(corner1.z + 0.5f, corner1.x + 0.5f)));
+            triangles.Add(AddVertex(corner2, normal, new Vector2(corner2.z + 0.5f, corner2.x + 0.5f)));
+            triangles.Add(AddVertex(corner3, normal, new Vector2(corner3.z + 0.5f, corner3.x + 0.5f)));
         }
 
         public void AddQuad(int bottomLeft, int topLeft, int topRight, int bottomRight)
@@ -59,9 +59,9 @@ namespace Scenes
         }
         
         //add 2 vectors for minimum and maximum uv
-        public void CreateQuad(Vector3 botLeft, Vector3 topLeft, Vector3 topRight, Vector3 botRight, int state)
+        public void CreateQuad(Vector3 botLeft, Vector3 topLeft, Vector3 topRight, Vector3 botRight, int state, int rotation)
         {
-            TranslateForTexture(state);
+            TranslateForTexture(state, rotation);
             
             Vector3 normal = GetNormal(botLeft, topLeft, topRight);
 
@@ -88,8 +88,7 @@ namespace Scenes
             
             AddQuad(a, b, c, d);
         }
-
-        //Tagen från https://docs.unity3d.com/ScriptReference/Vector3.Cross.html
+        
         private Vector3 GetNormal(Vector3 a, Vector3 b, Vector3 c)
         {
             Vector3 side1 = b - a;
@@ -98,7 +97,7 @@ namespace Scenes
             return Vector3.Cross(side1, side2).normalized;
         }
 
-        private void TranslateForTexture(int stateInt)
+        private void TranslateForTexture(int stateInt, int rotation)
         {
             TextureMatrix = Matrix4x4.Scale(new Vector3(0.5f, 0.5f, 1));
             Vector2 multWith;
@@ -122,7 +121,10 @@ namespace Scenes
                     break;
             }
             
-            TextureMatrix *= Matrix4x4.Translate(multWith);
+            TextureMatrix *= Matrix4x4.Translate(multWith) *
+                             Matrix4x4.Translate(new Vector3(-0.5f, -0.5f)) *
+                             Matrix4x4.Rotate(Quaternion.AngleAxis(90 - 90 * rotation, Vector3.forward)) * 
+                             Matrix4x4.Translate(new Vector3(0.5f, 0.5f));
         }
 
         public void Build(Mesh mesh)
