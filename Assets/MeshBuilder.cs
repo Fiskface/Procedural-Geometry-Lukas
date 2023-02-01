@@ -40,9 +40,9 @@ namespace Scenes
             //triangles.Add(AddVertex(hörn2, normal, new Vector2(1, 0)));
             //triangles.Add(AddVertex(hörn3, normal, new Vector2(0, 0)));
             
-            triangles.Add(AddVertex(corner1, normal, new Vector2(corner1.z + 0.5f, corner1.x + 0.5f)));
-            triangles.Add(AddVertex(corner2, normal, new Vector2(corner2.z + 0.5f, corner2.x + 0.5f)));
-            triangles.Add(AddVertex(corner3, normal, new Vector2(corner3.z + 0.5f, corner3.x + 0.5f)));
+            triangles.Add(AddVertex(corner1, normal, new Vector2(corner1.x + 0.5f, corner1.z + 0.5f)));
+            triangles.Add(AddVertex(corner2, normal, new Vector2(corner2.x + 0.5f, corner2.z + 0.5f)));
+            triangles.Add(AddVertex(corner3, normal, new Vector2(corner3.x + 0.5f, corner3.z + 0.5f)));
         }
 
         public void AddQuad(int bottomLeft, int topLeft, int topRight, int bottomRight)
@@ -68,23 +68,46 @@ namespace Scenes
             int a = AddVertex(
                 botLeft,
                 normal,
-            //new Vector2(0, 0));
-                new Vector2(botLeft.z + 0.5f, botLeft.x + 0.5f));
+                new Vector2(botLeft.x + 0.5f, botLeft.z + 0.5f));
             int b = AddVertex(
                 topLeft,
                 normal,
-            //    new Vector2(0, 1));
-                new Vector2(topLeft.z + 0.5f, topLeft.x + 0.5f));
+                new Vector2(topLeft.x + 0.5f, topLeft.z + 0.5f));
             int c = AddVertex(
                 topRight,
-                normal, 
-                //new Vector2(1, 1));
-                new Vector2(topRight.z + 0.5f, topRight.x + 0.5f));
+                normal,
+                new Vector2(topRight.x + 0.5f, topRight.z + 0.5f));
             int d = AddVertex(
                 botRight,
                 normal,
-                //new Vector2(1, 0));
-                new Vector2(botRight.z + 0.5f, botRight.x + 0.5f));
+                new Vector2(botRight.x + 0.5f, botRight.z + 0.5f));
+            
+            AddQuad(a, b, c, d);
+        }
+        
+        public void CreateQuad(Vector3 botLeft, Vector3 topLeft, Vector3 topRight, Vector3 botRight, int state, int rotation,
+            Vector2 bLUV, Vector2 tLUV, Vector2 tRUV, Vector2 bRUV)
+        {
+            TranslateForTexture(state, rotation);
+            
+            Vector3 normal = GetNormal(botLeft, topLeft, topRight);
+
+            int a = AddVertex(
+                botLeft,
+                normal,
+                new Vector2(bLUV.x + 0.5f, bLUV.y + 0.5f));
+            int b = AddVertex(
+                topLeft,
+                normal,
+                new Vector2(tLUV.x + 0.5f, tLUV.y + 0.5f));
+            int c = AddVertex(
+                topRight,
+                normal,
+                new Vector2(tRUV.x + 0.5f, tRUV.y + 0.5f));
+            int d = AddVertex(
+                botRight,
+                normal,
+                new Vector2(bRUV.x + 0.5f, bRUV.y + 0.5f));
             
             AddQuad(a, b, c, d);
         }
@@ -123,7 +146,7 @@ namespace Scenes
             
             TextureMatrix *= Matrix4x4.Translate(multWith) *
                              Matrix4x4.Translate(new Vector3(-0.5f, -0.5f)) *
-                             Matrix4x4.Rotate(Quaternion.AngleAxis(90 - 90 * rotation, Vector3.forward)) * 
+                             Matrix4x4.Rotate(Quaternion.AngleAxis(90 + 90 * rotation, Vector3.forward)) * 
                              Matrix4x4.Translate(new Vector3(0.5f, 0.5f));
         }
 

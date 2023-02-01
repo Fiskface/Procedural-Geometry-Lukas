@@ -15,6 +15,9 @@ public class Piece : MonoBehaviour
     private GridTile tile;
     private state currentState;
     
+    
+    private float pathSlantMultiplier = (float) (Math.Sqrt(1/6f * 1/6f + 0.2 * 0.2)) / 1/6;
+    
 
     private void Start()
     {
@@ -134,8 +137,10 @@ public class Piece : MonoBehaviour
                     //Make smooth corners in wall when path is turning
                     if (Check2StepsClockwise(i*2, state.Solid))
                     {
-                        builder.CreateQuad(new Vector3(0.5f, -0.2f, -1/6f),new Vector3(0.5f, 0, -1/3f), new Vector3(1/3f, 0, -1/3f), 
-                            new Vector3(1/6f,-0.2f, -1/6f), (int)currentState, i);
+                        builder.CreateQuad(new Vector3(0.5f, -0.2f, -1 / 6f), new Vector3(0.5f, 0, -1 / 3f),
+                            new Vector3(1 / 3f, 0, -1 / 3f),
+                            new Vector3(1 / 6f, -0.2f, -1 / 6f), (int)currentState, i);
+                        //new Vector2(-1/6f, 0.5f), new Vector2(-1/3f + 0.1f, 0.5f), new Vector2(-1/3f + 0.1f, 1/3f),new Vector2(-1/6f, 1/6f));
                     }
                     else
                     {
