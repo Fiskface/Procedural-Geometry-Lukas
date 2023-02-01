@@ -36,10 +36,13 @@ namespace Scenes
             
             Vector3 normal = GetNormal(hörn1, hörn2, hörn3);
             
-            triangles.Add(AddVertex(hörn1, normal, new Vector2(1, 1)));
-            triangles.Add(AddVertex(hörn2, normal, new Vector2(1, 0)));
-            triangles.Add(AddVertex(hörn3, normal, new Vector2(0, 0)));
+            //triangles.Add(AddVertex(hörn1, normal, new Vector2(1, 1)));
+            //triangles.Add(AddVertex(hörn2, normal, new Vector2(1, 0)));
+            //triangles.Add(AddVertex(hörn3, normal, new Vector2(0, 0)));
             
+            triangles.Add(AddVertex(hörn1, normal, new Vector2(hörn1.z + 0.5f, hörn1.x + 0.5f)));
+            triangles.Add(AddVertex(hörn2, normal, new Vector2(hörn2.z + 0.5f, hörn2.x + 0.5f)));
+            triangles.Add(AddVertex(hörn3, normal, new Vector2(hörn3.z + 0.5f, hörn3.x + 0.5f)));
         }
 
         public void AddQuad(int bottomLeft, int topLeft, int topRight, int bottomRight)
@@ -65,23 +68,23 @@ namespace Scenes
             int a = AddVertex(
                 botLeft,
                 normal,
-            new Vector2(0, 0));
-            //new Vector2(min.x, min.y));
+            //new Vector2(0, 0));
+                new Vector2(botLeft.z + 0.5f, botLeft.x + 0.5f));
             int b = AddVertex(
                 topLeft,
                 normal,
-                new Vector2(0, 1));
-            //new Vector2(min.x, max.y));
+            //    new Vector2(0, 1));
+                new Vector2(topLeft.z + 0.5f, topLeft.x + 0.5f));
             int c = AddVertex(
                 topRight,
                 normal, 
-                new Vector2(1, 1));
-                //new Vector2(max.x, max.y));
+                //new Vector2(1, 1));
+                new Vector2(topRight.z + 0.5f, topRight.x + 0.5f));
             int d = AddVertex(
                 botRight,
                 normal,
-                new Vector2(1, 0));
-                //new Vector2(max.x, min.y));
+                //new Vector2(1, 0));
+                new Vector2(botRight.z + 0.5f, botRight.x + 0.5f));
             
             AddQuad(a, b, c, d);
         }

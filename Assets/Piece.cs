@@ -200,8 +200,6 @@ public class Piece : MonoBehaviour
                     {
                         builder.CreateTriangle(new Vector3(0.5f, -0.1f, -0.4f), new Vector3(0.5f, 0, -0.5f), new Vector3(0.4f, -0.1f, -0.5f), (int)state.Solid);
                     }
-                    
-                    
                 }
 
                 else
@@ -217,6 +215,13 @@ public class Piece : MonoBehaviour
         {
             builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
                 new Vector3(0.5f, 0, -0.5f), (int)currentState);
+
+            for (int i = 0; i < 4; i++)
+            {
+                builder.VertexMatrix = Matrix4x4.Rotate(Quaternion.AngleAxis(-90 * i, new Vector3(0, 1, 0)));
+                
+                
+            }
         }
     }
     
