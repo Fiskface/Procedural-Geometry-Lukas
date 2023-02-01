@@ -336,7 +336,25 @@ MonoBehaviour:
   - Solid
   - Water
   _cellData:
+  - Properties: 0
+    JsonData: 
   - Properties: 2
+    JsonData: 
+  - Properties: 1
+    JsonData: 
+  - Properties: 0
+    JsonData: 
+  - Properties: 0
+    JsonData: 
+  - Properties: 0
+    JsonData: 
+  - Properties: 1
+    JsonData: 
+  - Properties: 1
+    JsonData: 
+  - Properties: 1
+    JsonData: 
+  - Properties: 1
     JsonData: 
   - Properties: 0
     JsonData: 
@@ -346,11 +364,13 @@ MonoBehaviour:
     JsonData: 
   - Properties: 2
     JsonData: 
-  - Properties: 2
+  - Properties: 0
+    JsonData: 
+  - Properties: 0
     JsonData: 
   - Properties: 1
     JsonData: 
-  - Properties: 1
+  - Properties: 0
     JsonData: 
   - Properties: 2
     JsonData: 
@@ -358,29 +378,9 @@ MonoBehaviour:
     JsonData: 
   - Properties: 0
     JsonData: 
-  - Properties: 1
-    JsonData: 
-  - Properties: 1
-    JsonData: 
-  - Properties: 1
-    JsonData: 
-  - Properties: 2
-    JsonData: 
-  - Properties: 1
-    JsonData: 
-  - Properties: 1
-    JsonData: 
-  - Properties: 2
-    JsonData: 
-  - Properties: 1
-    JsonData: 
-  - Properties: 1
-    JsonData: 
   - Properties: 0
     JsonData: 
-  - Properties: 0
-    JsonData: 
-  - Properties: 0
+  - Properties: 1
     JsonData: 
   - Properties: 0
     JsonData: 
