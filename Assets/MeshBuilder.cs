@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scenes
@@ -13,13 +14,7 @@ namespace Scenes
         public Matrix4x4 VertexMatrix = Matrix4x4.identity;
         public Matrix4x4 TextureMatrix = Matrix4x4.identity;
         
-        private Vector2[] stateTextureUV =
-        {
-            new Vector2(0, 1f), new Vector2(0.5f, 0.5f), //Gräs
-            new Vector2(0.5f, 0.5f), new Vector2(1, 0), //Sten
-            new Vector2(0.5f, 1), new Vector2(1f, 0.5f), //Vatten
-            new Vector2(0f, 0.5f), new Vector2(0.5f, 0f) //Sand
-        };
+        private float adjustForStretchInSolid = (float)Math.Sqrt((1 / 6f) * (1 / 6f) + 0.2f * 0.2f);
 
         public int AddVertex(Vector3 position, Vector3 normal, Vector2 uv)
         {
@@ -36,13 +31,23 @@ namespace Scenes
             
             Vector3 normal = GetNormal(corner1, corner2, corner3);
             
-            //triangles.Add(AddVertex(hörn1, normal, new Vector2(1, 1)));
-            //triangles.Add(AddVertex(hörn2, normal, new Vector2(1, 0)));
-            //triangles.Add(AddVertex(hörn3, normal, new Vector2(0, 0)));
-            
             triangles.Add(AddVertex(corner1, normal, new Vector2(corner1.x + 0.5f, corner1.z + 0.5f)));
             triangles.Add(AddVertex(corner2, normal, new Vector2(corner2.x + 0.5f, corner2.z + 0.5f)));
             triangles.Add(AddVertex(corner3, normal, new Vector2(corner3.x + 0.5f, corner3.z + 0.5f)));
+        }
+        
+        
+        
+        public void CreateTriangle(Vector3 corner1, Vector3 corner2, Vector3 corner3, int state, int rotation,
+            Vector2 cUV1, Vector2 cUV2, Vector2 cUV3)
+        {
+            TranslateForTexture(state, rotation);
+            
+            Vector3 normal = GetNormal(corner1, corner2, corner3);
+
+            triangles.Add(AddVertex(corner1, normal, new Vector2(cUV1.x + 0.5f, cUV1.y + 0.5f)));
+            triangles.Add(AddVertex(corner2, normal, new Vector2(cUV2.x + 0.5f, cUV2.y + 0.5f)));
+            triangles.Add(AddVertex(corner3, normal, new Vector2(cUV3.x + 0.5f, cUV3.y + 0.5f)));
         }
 
         public void AddQuad(int bottomLeft, int topLeft, int topRight, int bottomRight)
