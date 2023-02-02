@@ -13,8 +13,6 @@ namespace Scenes
         
         public Matrix4x4 VertexMatrix = Matrix4x4.identity;
         public Matrix4x4 TextureMatrix = Matrix4x4.identity;
-        
-        private float adjustForStretchInSolid = (float)Math.Sqrt((1 / 6f) * (1 / 6f) + 0.2f * 0.2f);
 
         public int AddVertex(Vector3 position, Vector3 normal, Vector2 uv)
         {

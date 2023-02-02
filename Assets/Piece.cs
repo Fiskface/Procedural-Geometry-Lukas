@@ -28,11 +28,7 @@ public class Piece : MonoBehaviour
     private void Update()
     {
         CheckCurrentState();
-        MakeCenter();
-        
-        //builder.CreateQuad(new Vector3(-0.5f, 0, -0.5f),new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f), 
-        //    new Vector3(0.5f, 0, -0.5f), new Vector3(0, 1, 0), (int)currentState);
-        
+        MakePiece();
         builder.Build(mesh);
     }
 
@@ -106,7 +102,7 @@ public class Piece : MonoBehaviour
         return CheckNeighborCurrentState(i) == state;
     }
 
-    private void MakeCenter()
+    private void MakePiece()
     {
         //Stoppar texurerna från att snurra hela tiden.
         builder.VertexMatrix = Matrix4x4.identity;
@@ -349,21 +345,5 @@ public class Piece : MonoBehaviour
             }
         }
     }
-    
-    
-    private void OnDrawGizmos() {
-        if (tile.GetProperty(GridTileProperty.Solid)) {
-            Gizmos.color = Color.red;
-        } else {
-            Gizmos.color = Color.green;
-        }
-        
-        if (tile.GetNeighbourProperty(0, GridTileProperty.Solid)) {
-            Gizmos.color = Color.yellow;
-        }
-        
-        Gizmos.DrawCube(transform.position, new Vector3(1, 0.1f, 1));
-    }
-    
     
 }
