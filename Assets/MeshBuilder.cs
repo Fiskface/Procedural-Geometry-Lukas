@@ -161,6 +161,7 @@ namespace Scenes
             mesh.SetUVs(0, uv);
             mesh.SetIndices(triangles, MeshTopology.Triangles, 0);
             mesh.MarkModified();
+            mesh.RecalculateTangents();
         }
     }
 }
