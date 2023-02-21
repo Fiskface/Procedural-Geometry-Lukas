@@ -289,6 +289,10 @@ public class Piece : MonoBehaviour
                     builder.CreateQuad(new Vector3(1 / 6f, 0.3f, 1 / 6f), new Vector3(0.5f, 0.3f, 1 / 6f),
                         new Vector3(0.5f, 0.3f, -1 / 6f),
                         new Vector3(1 / 6f, 0.3f, -1 / 6f), (int)state.Bridge, i);
+                    
+                    builder.CreateQuad(new Vector3(1 / 6f, 0.3f, -1 / 6f), new Vector3(0.5f, 0.3f, -1 / 6f),
+                        new Vector3(0.5f, 0.3f, 1 / 6f), new Vector3(1 / 6f, 0.3f, 1 / 6f), 
+                        (int)state.Bridge, i );
                 }
 
                 if (CheckNeighborCurrentState(i * 2) == state.Water || CheckNeighborCurrentState(i*2) == state.Bridge)
