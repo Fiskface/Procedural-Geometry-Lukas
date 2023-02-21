@@ -27,6 +27,7 @@ public class Piece : MonoBehaviour
 
     private void Update()
     {
+        builder.ClearLists();
         CheckCurrentState();
         MakePiece();
         builder.Build(mesh);
@@ -65,6 +66,11 @@ public class Piece : MonoBehaviour
 
     private state CheckNeighborCurrentState(int neighbor)
     {
+        if (neighbor < 0)
+            neighbor += 8;
+        if (neighbor > 7)
+            neighbor -= 8;
+        
         if (tile.GetNeighbourProperty(neighbor, GridTileProperty.Solid) && tile.GetNeighbourProperty(neighbor, GridTileProperty.Water))
         {
             return state.Bridge;
@@ -207,7 +213,7 @@ public class Piece : MonoBehaviour
 
                 if (CheckNeighborCurrentState(i*2) == state.Water)
                 {
-                    if (Check2StepsClockwise(i*2, state.Water))
+                    if (Check2StepsClockwise(i*2, state.Water) && CheckNeighborCurrentState(i*2 - 1) != state.Water)
                     {
                         builder.CreateTriangle(new Vector3(0.5f, -0.1f, -0.4f), new Vector3(0.5f, 0, -0.5f),
                             new Vector3(0.4f, -0.1f, -0.5f), (int)state.Solid, i);

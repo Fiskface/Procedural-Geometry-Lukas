@@ -163,5 +163,13 @@ namespace Scenes
             mesh.MarkModified();
             mesh.RecalculateTangents();
         }
+
+        public void ClearLists()
+        {
+            vertices.Clear();
+            normals.Clear();
+            uv.Clear();
+            triangles.Clear();
+        }
     }
 }
