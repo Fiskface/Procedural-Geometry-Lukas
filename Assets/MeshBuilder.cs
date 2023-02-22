@@ -61,7 +61,6 @@ namespace Scenes
             triangles.Add(bottomRight);
         }
         
-        //add 2 vectors for minimum and maximum uv
         public void CreateQuad(Vector3 botLeft, Vector3 topLeft, Vector3 topRight, Vector3 botRight, int state, int rotation)
         {
             TranslateForTexture(state, rotation);
